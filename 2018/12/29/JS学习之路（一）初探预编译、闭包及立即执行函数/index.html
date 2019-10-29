@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JS学习之路(一)初探预编译、闭包及立即执行函数 - 守敬博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="守敬,"> 
+    <meta name="description" content="永远的学生,今天内容比较多，闲话就少叙了，直接进入主题了。昨晚熬夜和今天晚上下课之后看完了渡一成哥的js入门课程的很大一段内容，内容深入浅出，比自己看书理解要透彻得多，但是好记性不如烂笔头，还是一一记下慢慢温习,"> 
+    <meta name="author" content="守敬"> 
+    <link rel="alternative" href="atom.xml" title="守敬博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/icon.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+</head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">守敬博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">JS学习之路(一)初探预编译、闭包及立即执行函数</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">JS学习之路(一)初探预编译、闭包及立即执行函数</h1>
+        <div class="stuff">
+            <span>十二月 29, 2018</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/ES5/" rel="tag">ES5</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/JS%E5%85%A5%E9%97%A8/" rel="tag">JS入门</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p>今天内容比较多，闲话就少叙了，直接进入主题了。昨晚熬夜和今天晚上下课之后看完了渡一成哥的js入门课程的很大一段内容，内容深入浅出，比自己看书理解要透彻得多，但是好记性不如烂笔头，还是一一记下慢慢温习吧。</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>函数是由事件驱动的或者当它被调用时执行的可重复使用的代码块。这是一般得定义，简单翻译成正常人能听懂的话就是函数是一坨可以重复使用的实现内容定义的一系列动作的代码块，当被调用时就作出规定动作。</p>
+<h3 id="函数的语法"><a href="#函数的语法" class="headerlink" title="函数的语法"></a>函数的语法</h3><p>函数语法由关键字<code>function</code>声明，后接<code>函数名</code>加<code>(参数)</code>代码块组成<code>{    }</code>，如这就是一个简单的函数声明过程：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>  (<span class="params"></span>)  </span>&#123;</span><br><span class="line">	doucument.write(<span class="string">'abc'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码定义了一个test的函数，功能就是当它被调用或触发时向页面打印abc。如此就实现了一个函数的定义，这种方式称为函数声明。函数还有另一种函数的定义方式——函数表达式，分为命名函数表达式和匿名函数表达式，注意函数表达式一般指匿名函数表达式，如：<code>var test = function (){   }</code>.</p>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>函数的参数分为形参和实参，形参是函数被定义时在函数名后的括号内声明的参数，实参则是在调用时向函数传递的实际参数。注意形参与实参并不一定要个数相等，不需要严格一一对应。当实参的数量大于形参的数量时，实参会被函数内部的类数组——实参列表<code>arguments</code>保存。实参和实参列表有对应关系时是保持映射关系的（不是同一个），如以下情况，但是没有对应关系时就没有映射关系。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">		a = <span class="number">2</span>;<span class="comment">//改变实参值</span></span><br><span class="line">		<span class="built_in">arguments</span>[<span class="number">0</span>] = <span class="number">3</span>;<span class="comment">//改变实参列表第一项的值</span></span><br><span class="line">		<span class="built_in">console</span>.log(<span class="built_in">arguments</span>[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br><span class="line">sum(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数的返回值（停止条件）"><a href="#函数的返回值（停止条件）" class="headerlink" title="函数的返回值（停止条件）"></a>函数的返回值（停止条件）</h3><p><code>return</code>可以将函数执行的结果返回被调用的地方，同时停止函数的执行。</p>
+<h2 id="作用域初探"><a href="#作用域初探" class="headerlink" title="作用域初探"></a>作用域初探</h2><p>函数内部声明的变量只能在函数内部使用，称为局部变量。在函数外部声明的变量称为全局变量，他能被所有的函数使用。一般局部函数在函数执行完毕时即被“销毁”，因此在另外的函数中可以使用同样的变量名声明局部变量。</p>
+<h2 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h2><p>引例：使用函数实现阶乘的算法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1. 找规律</span></span><br><span class="line"><span class="comment">//2. 找到出口（停止条件）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mul</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(n &lt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">'请输入正整数'</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(n == <span class="number">1</span> || n == <span class="number">0</span>)	&#123;</span><br><span class="line">		<span class="keyword">return</span> num = <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n * mul(n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">	<span class="keyword">var</span> num = mul(n);</span><br></pre></td></tr></table></figure>
+<p>递归简单来说就是在函数中调用自己，递归的思想就是找到规律，并找到跳出条件即可。</p>
+<h2 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h2><h3 id="JS执行三部曲"><a href="#JS执行三部曲" class="headerlink" title="JS执行三部曲"></a>JS执行三部曲</h3><p>JS代码在浏览器执行的过程分为三步，分别为通篇<strong>语法分析、预编译、解释执行</strong>。语法分析就是指js引擎去判断检查你的代码是否存在语法错误，解释执行更不用多说，自然就是执行你的代码，然而重中之重的是预编译，预编译简单理解就是在内存中开辟一些空间，存放一些变量与函数 。</p>
+<p>两句口诀：</p>
+<ol>
+<li>函数声明整体提升</li>
+<li>变量 声明提升</li>
+</ol>
+<h3 id="预编译前奏"><a href="#预编译前奏" class="headerlink" title="预编译前奏"></a>预编译前奏</h3><ol>
+<li>imply global 暗示全局变量：即任何变量，如果未经声明就复制，那么此变量就为全局对象window所有。</li>
+<li>一切声明的全局变量，全是window的属性。</li>
+</ol>
+<h3 id="预编译-1"><a href="#预编译-1" class="headerlink" title="预编译"></a>预编译</h3><p>预编译四部曲(函数执行前）</p>
+<ol>
+<li>创建AO对象（Active Object）（执行期上下文） </li>
+<li>查找函数形参及函数内变量声明，形参名及变量名作为AO对象的属性，值为undefined //变量 声明提升（值为undefined）</li>
+<li>实参形参相统一，实参值赋给形参 </li>
+<li>在函数体里面找函数声明，值赋予函数体 //函数声明整体提升</li>
+</ol>
+<p>预编译(JS脚本执行前）</p>
+<ol>
+<li>生成GO对象（Global Object）（全局执行期上下文）</li>
+<li>查找全局变量声明（包括隐式全局变量声明，省略var声明），变量名作全局对象的属性，值为undefined </li>
+<li>查找函数声明，函数名作为全局对象的属性，值为函数引用</li>
+</ol>
+<p>说明：上一节提到的window实际上就是GO。</p>
+<h3 id="精解作用域"><a href="#精解作用域" class="headerlink" title="精解作用域"></a>精解作用域</h3><ol>
+<li>[[scope]]:每个JS函数都是一个对象，对象中有些属性我们可以访问，但有些不可以，这些属性仅供JS引擎存取，[[scope]]就是其中一个。[[scope]]<strong>指的就是我们所说的作用域</strong>，其中储存了运行期上下文的几何。</li>
+<li>作用域链： [[scope]]中所存储的执行期上下文对象的集合，<strong>这个集合呈链式连接</strong>，我们把这种链式连接叫做作用域链。</li>
+<li>运行期上下文：<strong>当函数执行时（执行前一刻预编译环节），会创建一个称为执行期上下文的内部对象</strong>。一个执行期上下文定义了一个函数执行时的环境，函数每次被执行时对应的执行期上下文都是独一无二的，所以多次调用一个函数会导致创建多个执行上下文，当函数执行完毕，它所产生的执行上下文即被销毁。</li>
+<li>查找变量：从作用域的顶端依次向下查找。</li>
+</ol>
+<p>举例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> b = <span class="number">234</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	b();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> glob = <span class="number">100</span>;</span><br><span class="line">a();</span><br></pre></td></tr></table></figure>
+<p><strong>函数a被定义时，发生如下过程</strong>（继承全局的环境）</p>
+<p><img src="https://img-blog.csdnimg.cn/20181229003754207.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nob3VqaW5nMTAwMQ==,size_16,color_FFFFFF,t_70" alt="创建a函数生成scope继承GO环境"></p>
+<p><strong>函数a被执行时，发生如下过程</strong>（生成自己的AO）</p>
+<p><img src="https://img-blog.csdnimg.cn/20181229003903758.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nob3VqaW5nMTAwMQ==,size_16,color_FFFFFF,t_70" alt="a函数执行时生成自己的AO"><br>当函数a执行完毕后，产生的AO被销毁，可理解为箭头被砍断了。</p>
+<p><strong>函数b被创建时，发生如下过程</strong>（站在函数a的肩膀上，继承a的环境，与aAO是同一个AO，只是引用方式不同）</p>
+<p><img src="https://img-blog.csdnimg.cn/20181229003954946.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nob3VqaW5nMTAwMQ==,size_16,color_FFFFFF,t_70" alt="b函数创建时继承a函数的全部环境"></p>
+<p>b的作用域链中的AO与aAO是同一个AO，只是引用方式不同<br>如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> bb = <span class="number">234</span>;</span><br><span class="line">		aa = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> aa = <span class="number">123</span>;</span><br><span class="line">	b();</span><br><span class="line">	<span class="built_in">console</span>.log(aa);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> glob = <span class="number">100</span>;</span><br><span class="line">a();</span><br></pre></td></tr></table></figure>
+<p>以上代码执行后输出的aa值为0，说明了b的作用域链中的AO与aAO是同一个AO，只是引用方式不同。</p>
+<p><strong>函数b被执行时，发生如下过程（生成自己的AO）</strong><br><img src="https://img-blog.csdnimg.cn/2018122900404976.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nob3VqaW5nMTAwMQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>b执行完毕后砍断了自己生成的AO，原来a生成的aAO，不会销毁，只有a执行完毕才能销毁。</p>
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>引例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> bbb = <span class="number">234</span>;</span><br><span class="line">		<span class="built_in">document</span>.write(aaa);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> aaa = <span class="number">123</span>;</span><br><span class="line">	<span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> glob = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> demo = a();</span><br><span class="line">demo();</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20181229004152763.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Nob3VqaW5nMTAwMQ==,size_16,color_FFFFFF,t_70" alt="闭包的产生过程"></p>
+<p>如图所示，闭包的产生过程即是函数内部函数被抛出到全局中。<strong>我们称当内部函数被保存到外部时，就生成了闭包</strong>。闭包形成后将会导致原有的作用域链不释放，造成内存泄漏。结合图示理解即为<strong>a执行完毕后砍断了自己与AO的联系，但是此时b函数已经到了全局中，a砍断自己与AO的联系不会影响到b与AO的联系。而考虑当b执行完毕后，b只会砍掉自己生成的AO联系，那么a生成的AO就被永久的保存到了b的作用域中</strong>。</p>
+<h3 id="闭包的作用"><a href="#闭包的作用" class="headerlink" title="闭包的作用"></a>闭包的作用</h3><ul>
+<li>实现公有变量</li>
+<li>可以用作储存结构</li>
+<li>可以实现封装，属性私有化</li>
+<li>模块化开发，防止污染全局变量</li>
+</ul>
+<h2 id="立即执行函数"><a href="#立即执行函数" class="headerlink" title="立即执行函数"></a>立即执行函数</h2><p>对于某些特殊的初始化功能的函数，我们希望在它被创建时就执行，而不是等到被调用时才执行，此时立即执行函数可以派上用场。</p>
+<h3 id="立即执行函数的格式"><a href="#立即执行函数的格式" class="headerlink" title="立即执行函数的格式"></a>立即执行函数的格式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125; ());<span class="comment">//W3C建议使用</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125; )();</span><br></pre></td></tr></table></figure>
+
+<h3 id="立即执行函数的原理"><a href="#立即执行函数的原理" class="headerlink" title="立即执行函数的原理"></a>立即执行函数的原理</h3><p>理解立即执行函数只需记住：只有表达式才能被执行符号<code>()</code>执行。最外层的括号相当于将内部的函数转变为一个表达式，接下来即可被执行符号执行（最后一个括号）。我们使用<code>-</code>、<code>+</code>都可以达到同样的效果：<code>+ function () {} ()</code>。</p>
+<h3 id="立即执行函数的应用举例"><a href="#立即执行函数的应用举例" class="headerlink" title="立即执行函数的应用举例"></a>立即执行函数的应用举例</h3><p>首先看如下代码，需求是实现使用闭包向页面打印0-9这10个数字。但是执行结果向页面最终输出的却是十个10.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> arr = [];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;  <span class="number">10</span>; i ++) &#123;</span><br><span class="line">		arr[i] = funtion () &#123;</span><br><span class="line">			<span class="built_in">document</span>.write(i + <span class="string">" "</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> myArr = test();</span><br></pre></td></tr></table></figure>
+
+<p>造成这种结果的原因是：arr对应的内部函数被储存到arr数组中时，函数内容并没有被调用执行，因此打印语句中的<code>i</code>还是i而不是对应的i的值。当arr被抛出到全局中时，调用arr函数时数组中每个函数形成的闭包对应的GO中的i都已经变成了10，因此最后向页面输出的全是10.</p>
+<p><strong>使用立即执行函数进行优化：</strong></p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>{
+    <span class="keyword">var</span> arr = [];
+        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;  <span class="number">10</span>; i ++) {
+            (<span class="function"><span class="keyword">function</span> (<span class="params">j</span>) </span>{
+                arr[j] = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+                    <span class="built_in">document</span>.write(j + <span class="string">" "</span>);
+                }
+            }(i));
+        }
+    <span class="keyword">return</span> arr;
+}
+<span class="keyword">var</span> myArr = test();
+<span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; <span class="number">10</span>; j ++) {
+    myArr[j]();
+} </code></pre>
+<p>经过立即执行函数，每一个函数在被保存到数组arr中的同时，for循环的函数语句要被执行，函数执行完毕那么将切断作用域中AO的联系，那么在全局中调用这个数组中的函数时，内部函数访问的就是对应的j的值了，也就是每个函数都对应的是自己的AO，而不是十对一。</p>
+<hr>
+<p>哈哈哈哈终于总结完了，还有很多例子没有记下来，不过上面这些都是精华了。今晚太累了，明天再继续学习啦！</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="http://domain.com/awesome.mp3">
+            </audio>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci='b525f9b5e2f1a3004963'
+        data-cs='4695c3a2a6bc64967ea98d863b96831041684e4e'
+        data-r='shoujing1001.github.io'
+        data-o='shoujing1001'
+        data-a='shoujing1001'
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class='side'>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数"><span class="toc-number">1.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数的语法"><span class="toc-number">1.1.</span> <span class="toc-text">函数的语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数"><span class="toc-number">1.2.</span> <span class="toc-text">参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数的返回值（停止条件）"><span class="toc-number">1.3.</span> <span class="toc-text">函数的返回值（停止条件）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作用域初探"><span class="toc-number">2.</span> <span class="toc-text">作用域初探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#递归"><span class="toc-number">3.</span> <span class="toc-text">递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预编译"><span class="toc-number">4.</span> <span class="toc-text">预编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JS执行三部曲"><span class="toc-number">4.1.</span> <span class="toc-text">JS执行三部曲</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预编译前奏"><span class="toc-number">4.2.</span> <span class="toc-text">预编译前奏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预编译-1"><span class="toc-number">4.3.</span> <span class="toc-text">预编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#精解作用域"><span class="toc-number">4.4.</span> <span class="toc-text">精解作用域</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#闭包"><span class="toc-number">5.</span> <span class="toc-text">闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包的作用"><span class="toc-number">5.1.</span> <span class="toc-text">闭包的作用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#立即执行函数"><span class="toc-number">6.</span> <span class="toc-text">立即执行函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#立即执行函数的格式"><span class="toc-number">6.1.</span> <span class="toc-text">立即执行函数的格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#立即执行函数的原理"><span class="toc-number">6.2.</span> <span class="toc-text">立即执行函数的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#立即执行函数的应用举例"><span class="toc-number">6.3.</span> <span class="toc-text">立即执行函数的应用举例</span></a></li></ol></li></ol>
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>
